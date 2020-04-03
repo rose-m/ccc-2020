@@ -64,19 +64,24 @@ public class Challenge3 extends AbstractChallenge {
                     final List<Double> values = reader.parseDoubles();
                     final PointData data = new PointData(values.get(0) / 180 * Math.PI, values.get(1) / 180 * Math.PI, values.get(2));
 
-                    double a = 6371 * 1000, b = a;
-                    double e = 1 - (b * b) / (a * a);
-                    double N_lat = a / Math.sqrt(1 - e * e * Math.sin(data.lat) * Math.sin(data.lat));
-                    double x = (N_lat + data.alt) * Math.cos(data.lat) * Math.cos(data.lon);
-                    double y = (N_lat + data.alt) * Math.cos(data.lat) * Math.sin(data.lon);
-                    double z = (b * b / (a * a) * N_lat + data.alt) * Math.sin(data.lat);
-
-                    w.println(new GeoData(x, y, z));
+                    final GeoData geoData = convertCoordinates(data);
+                    w.println(geoData);
                 }
             } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
         }
+    }
+
+    public static GeoData convertCoordinates(PointData data) {
+        double a = 6371 * 1000, b = a;
+        double e = 1 - (b * b) / (a * a);
+        double N_lat = a / Math.sqrt(1 - e * e * Math.sin(data.lat) * Math.sin(data.lat));
+        double x = (N_lat + data.alt) * Math.cos(data.lat) * Math.cos(data.lon);
+        double y = (N_lat + data.alt) * Math.cos(data.lat) * Math.sin(data.lon);
+        double z = (b * b / (a * a) * N_lat + data.alt) * Math.sin(data.lat);
+
+        return new GeoData(x, y, z);
     }
 
     public static void main(String[] args) {

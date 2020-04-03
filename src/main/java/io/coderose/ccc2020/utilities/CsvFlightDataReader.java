@@ -9,9 +9,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CsvFlightDataReader extends FileReader {
 
+    public final int flightId;
     public final FlightKey route;
     public final int takeOffTimestamp;
     private final int dataLines;
@@ -30,10 +32,28 @@ public class CsvFlightDataReader extends FileReader {
             this.lon = lon;
             this.alt = alt;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Point point = (Point) o;
+            return offset == point.offset &&
+                    timestamp == point.timestamp &&
+                    Double.compare(point.lat, lat) == 0 &&
+                    Double.compare(point.lon, lon) == 0 &&
+                    Double.compare(point.alt, alt) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(offset, timestamp, lat, lon, alt);
+        }
     }
 
-    CsvFlightDataReader(List<String> content) {
+    CsvFlightDataReader(int flightId, List<String> content) {
         super(content);
+        this.flightId = flightId;
         route = new FlightKey(parseStrings().get(0), parseStrings().get(0));
         takeOffTimestamp = parseInts().get(0);
         dataLines = parseInts().get(0);
@@ -79,7 +99,7 @@ public class CsvFlightDataReader extends FileReader {
             throw new IllegalStateException("failed to read resource content", e);
         }
 
-        return new CsvFlightDataReader(content);
+        return new CsvFlightDataReader(flightId, content);
     }
 
 }

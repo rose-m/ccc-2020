@@ -19,11 +19,15 @@ public class Interpolate4 {
             throw new IllegalArgumentException("out of bounds");
         }
 
+        return interpolate(prev, next, timestamp);
+    }
+
+    static Point interpolate(Point prev, Point next, int timestamp) {
         double lat = interpolate(prev.timestamp, prev.lat, next.timestamp, next.lat, timestamp);
         double lon = interpolate(prev.timestamp, prev.lon, next.timestamp, next.lon, timestamp);
         double alt = interpolate(prev.timestamp, prev.alt, next.timestamp, next.alt, timestamp);
 
-        return new Point(0, 0, lat, lon, alt);
+        return new Point(timestamp - (next.timestamp - next.offset), timestamp, lat, lon, alt);
     }
 
     private static double interpolate(int x0, double y0, int x1, double y1, int x) {

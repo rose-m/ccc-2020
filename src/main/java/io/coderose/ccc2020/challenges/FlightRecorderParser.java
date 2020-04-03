@@ -1,5 +1,6 @@
 package io.coderose.ccc2020.challenges;
 
+import com.google.common.base.Preconditions;
 import io.coderose.ccc2020.challenges.Challenge3.GeoData;
 import io.coderose.ccc2020.utilities.CsvFlightDataReader;
 import io.coderose.ccc2020.utilities.CsvFlightDataReader.Point;
@@ -31,7 +32,7 @@ public class FlightRecorderParser {
         final int lastAbove = above6000.get(above6000.size() - 1).timestamp;
 
         final FlightRecorder result = new FlightRecorder();
-        result.route = csvReader.route;
+        result.route = Preconditions.checkNotNull(csvReader.route);
         result.flightId = csvReader.flightId;
         result.takeoffTime = csvReader.takeOffTimestamp;
         result.minTimestamp = firstAbove;
@@ -73,13 +74,15 @@ public class FlightRecorderParser {
     }
 
     public static GeoData convertCoordinates(Point data) {
+        final double lat = data.lat / 180 * Math.PI;
+        final double lon = data.lon / 180 * Math.PI;
+
         double a = 6371 * 1000, b = a;
         double e = 1 - (b * b) / (a * a);
-        double N_lat = a / Math.sqrt(1 - e * e * Math.sin(data.lat) * Math.sin(data.lat));
-        double x = (N_lat + data.alt) * Math.cos(data.lat) * Math.cos(data.lon);
-        double y = (N_lat + data.alt) * Math.cos(data.lat) * Math.sin(data.lon);
-        double z = (b * b / (a * a) * N_lat + data.alt) * Math.sin(data.lat);
-
+        double N_lat = a / Math.sqrt(1 - e * e * Math.sin(lat) * Math.sin(lat));
+        double x = (N_lat + data.alt) * Math.cos(lat) * Math.cos(lon);
+        double y = (N_lat + data.alt) * Math.cos(lat) * Math.sin(lon);
+        double z = (b * b / (a * a) * N_lat + data.alt) * Math.sin(lat);
         return new GeoData(x, y, z);
     }
 }

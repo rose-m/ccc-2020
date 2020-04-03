@@ -2,11 +2,13 @@ package io.coderose.ccc2020.challenges;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.junit.jupiter.api.Assertions;
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FlightIntersectorTest {
 
@@ -34,9 +36,15 @@ class FlightIntersectorTest {
         flightB.minTimestamp = 1;
         flightB.maxTimestamp = 3;
 
-        List<String> intersection = FlightIntersector.intersect(flightA, flightB, 0, 1);
+        final ArrayList<String> aToB = Lists.newArrayList();
+        final ArrayList<String> bToA = Lists.newArrayList();
+        FlightIntersector.intersect(
+                flightA, flightB,
+                aToB, bToA,
+                0, 1
+        );
 
-        Assertions.assertEquals(intersection, ImmutableList.of("42 43 0 2"));
+        assertEquals(aToB, ImmutableList.of("42 43 0 2"));
     }
 
     @Test
@@ -66,9 +74,16 @@ class FlightIntersectorTest {
         flightB.minTimestamp = 1;
         flightB.maxTimestamp = 5;
 
-        List<String> intersection = FlightIntersector.intersect(flightA, flightB, 0, 1);
+        final ArrayList<String> aToB = Lists.newArrayList();
+        final ArrayList<String> bToA = Lists.newArrayList();
+        FlightIntersector.intersect(
+                flightA, flightB,
+                aToB, bToA,
+                0, 1
+        );
 
-        Assertions.assertEquals(ImmutableList.of("42 43 0 2 4-5", "42 43 1 4"), intersection);
+        assertEquals(ImmutableList.of("42 43 0 2 4-5", "42 43 1 5"), aToB);
+        assertEquals(ImmutableList.of("43 42 1 5"), bToA);
     }
 
     @Test
@@ -98,8 +113,15 @@ class FlightIntersectorTest {
         flightB.minTimestamp = 11;
         flightB.maxTimestamp = 15;
 
-        List<String> intersection = FlightIntersector.intersect(flightA, flightB, 0, 10);
+        final ArrayList<String> aToB = Lists.newArrayList();
+        final ArrayList<String> bToA = Lists.newArrayList();
+        FlightIntersector.intersect(
+                flightA, flightB,
+                aToB, bToA,
+                0, 10
+        );
 
-        Assertions.assertEquals(Arrays.asList("43 42 6 11, 43 42 7 11-12, 43 42 8 12-13, 43 42 9 11 13-14, 43 42 10 11-12 14-15, 43 42 11 12-13 15, 43 42 12 13-14, 43 42 13 14-15, 43 42 14 15".split(", ")), intersection);
+        assertEquals(0, aToB.size());
+        assertEquals(Arrays.asList("43 42 6 11, 43 42 7 11-12, 43 42 8 12-13, 43 42 9 11 13-14, 43 42 10 11-12 14-15, 43 42 11 12-13 15, 43 42 12 13-14, 43 42 13 14-15, 43 42 14 15".split(", ")), bToA);
     }
 }

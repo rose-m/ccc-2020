@@ -25,17 +25,17 @@ public class FlightIntersector {
         }
     }
 
-    public static List<String> intersect(FlightRecorder flightA, FlightRecorder flightB, double minDist, double maxDist) {
-        List<String> results = Lists.newArrayList();
-
+    public static void intersect(
+            FlightRecorder flightA, FlightRecorder flightB,
+            List<String> resultAtoB, List<String> resultBtoA,
+            double minDist, double maxDist
+    ) {
         for (int offset = 0; offset <= 3600; offset++) {
-            intersectWithOffset(flightA, flightB, minDist, maxDist, results, offset);
+            intersectWithOffset(flightA, flightB, minDist, maxDist, resultAtoB, offset);
         }
         for (int offset = 1; offset <= 3600; offset++) {
-            intersectWithOffset(flightB, flightA, minDist, maxDist, results, offset);
+            intersectWithOffset(flightB, flightA, minDist, maxDist, resultBtoA, offset);
         }
-
-        return results;
     }
 
     private static void intersectWithOffset(FlightRecorder flightA, FlightRecorder flightB, double minDist, double maxDist, List<String> results, int offset) {

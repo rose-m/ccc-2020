@@ -43,6 +43,11 @@ public class FileReader {
         return new FileReader(content);
     }
 
+    @Nonnull
+    public <T> T extract(LineExtractor<T> extractor) {
+        return extractor.extract(this);
+    }
+
     /**
      * Sets current line index to the given line (0-based)
      */

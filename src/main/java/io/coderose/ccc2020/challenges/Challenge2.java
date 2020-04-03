@@ -24,7 +24,7 @@ public class Challenge2 extends AbstractChallenge {
 
     @Override
     public void run() {
-        for (int f = 1; f <= 5; f++) {
+        for (int f = 1; f <= 2; f++) {
             reader = newReader("level2_" + f + ".in");
             File file = new File("level2_" + f + ".out");
             System.out.println(file.getAbsoluteFile());

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class Challenge4 extends AbstractChallenge {
+public class Challenge5 extends AbstractChallenge {
 
     private FileReader reader;
 
@@ -44,6 +44,6 @@ public class Challenge4 extends AbstractChallenge {
     }
 
     public static void main(String[] args) {
-        new Challenge4().run();
+        new Challenge5().run();
     }
 }

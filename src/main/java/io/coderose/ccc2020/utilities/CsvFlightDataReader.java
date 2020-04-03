@@ -60,8 +60,8 @@ public class CsvFlightDataReader extends FileReader {
         return result;
     }
 
-    public static CsvFlightDataReader forResource(String challengeName, int flightId) {
-        final String resourcePath = "/" + challengeName + "/usedFlights/" + flightId + ".csv";
+    public static CsvFlightDataReader forResource(int flightId) {
+        final String resourcePath = "/usedFlights/" + flightId + ".csv";
         final URL resource = FileReader.class.getResource(resourcePath);
         if (resource == null) {
             throw new IllegalArgumentException("Resource " + resourcePath + " doesn't exist");

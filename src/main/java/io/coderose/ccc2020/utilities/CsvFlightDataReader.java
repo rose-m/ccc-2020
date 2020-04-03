@@ -7,6 +7,7 @@ import io.coderose.ccc2020.challenges.FlightKey;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CsvFlightDataReader extends FileReader {
@@ -21,6 +22,14 @@ public class CsvFlightDataReader extends FileReader {
         public double lat;
         public double lon;
         public double alt;
+
+        public Point(int offset, int timestamp, double lat, double lon, double alt) {
+            this.offset = offset;
+            this.timestamp = timestamp;
+            this.lat = lat;
+            this.lon = lon;
+            this.alt = alt;
+        }
     }
 
     CsvFlightDataReader(List<String> content) {
@@ -31,11 +40,28 @@ public class CsvFlightDataReader extends FileReader {
     }
 
     public Point parsePoint() {
-        return null;
+        final List<Double> values = parseDoubles();
+        final int offset = values.get(0).intValue();
+        return new Point(
+                offset,
+                takeOffTimestamp + offset,
+                values.get(1),
+                values.get(2),
+                values.get(3)
+        );
+    }
+
+    public List<Point> parseAllPoints() {
+        gotoLine(4);
+        final List<Point> result = new ArrayList<>(dataLines);
+        for (int i = 0; i < dataLines; i++) {
+            result.add(parsePoint());
+        }
+        return result;
     }
 
     public static CsvFlightDataReader forResource(String challengeName, int flightId) {
-        final String resourcePath = "/" + challengeName + "/usedFlights/" + flightId;
+        final String resourcePath = "/" + challengeName + "/usedFlights/" + flightId + ".csv";
         final URL resource = FileReader.class.getResource(resourcePath);
         if (resource == null) {
             throw new IllegalArgumentException("Resource " + resourcePath + " doesn't exist");

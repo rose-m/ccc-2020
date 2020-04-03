@@ -14,6 +14,14 @@ public class FlightKey {
     String destination;
 
     @Override
+    public String toString() {
+        return "FlightKey{" +
+                "source='" + source + '\'' +
+                ", destination='" + destination + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

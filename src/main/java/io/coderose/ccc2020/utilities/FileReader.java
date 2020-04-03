@@ -15,7 +15,7 @@ public class FileReader {
 
     private final List<String> content;
     private int currentLine = 0;
-    private String separator = " ";
+    private String separator = ",";
 
     private FileReader(List<String> content) {
         this.content = content;

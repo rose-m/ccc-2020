@@ -12,10 +12,26 @@ import java.util.List;
 public class CsvFlightDataReader extends FileReader {
 
     public final FlightKey route;
+    public final int takeOffTimestamp;
+    private final int dataLines;
+
+    public static class Point {
+        public int offset;
+        public int timestamp; // takeOff + offset
+        public double lat;
+        public double lon;
+        public double alt;
+    }
 
     CsvFlightDataReader(List<String> content) {
         super(content);
         route = new FlightKey(parseStrings().get(0), parseStrings().get(0));
+        takeOffTimestamp = parseInts().get(0);
+        dataLines = parseInts().get(0);
+    }
+
+    public Point parsePoint() {
+        return null;
     }
 
     public static CsvFlightDataReader forResource(String challengeName, int flightId) {

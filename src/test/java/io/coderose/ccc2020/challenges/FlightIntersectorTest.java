@@ -3,6 +3,7 @@ package io.coderose.ccc2020.challenges;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import io.coderose.ccc2020.challenges.FlightIntersector.IntervalSet;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ class FlightIntersectorTest {
         flightB.minTimestamp = 1;
         flightB.maxTimestamp = 3;
 
-        final ArrayList<String> aToB = Lists.newArrayList();
-        final ArrayList<String> bToA = Lists.newArrayList();
+        final ArrayList<IntervalSet> aToB = Lists.newArrayList();
+        final ArrayList<IntervalSet> bToA = Lists.newArrayList();
         FlightIntersector.intersect(
                 flightA, flightB,
                 aToB, bToA,
@@ -74,8 +75,8 @@ class FlightIntersectorTest {
         flightB.minTimestamp = 1;
         flightB.maxTimestamp = 5;
 
-        final ArrayList<String> aToB = Lists.newArrayList();
-        final ArrayList<String> bToA = Lists.newArrayList();
+        final ArrayList<IntervalSet> aToB = Lists.newArrayList();
+        final ArrayList<IntervalSet> bToA = Lists.newArrayList();
         FlightIntersector.intersect(
                 flightA, flightB,
                 aToB, bToA,
@@ -113,8 +114,8 @@ class FlightIntersectorTest {
         flightB.minTimestamp = 11;
         flightB.maxTimestamp = 15;
 
-        final ArrayList<String> aToB = Lists.newArrayList();
-        final ArrayList<String> bToA = Lists.newArrayList();
+        final ArrayList<IntervalSet> aToB = Lists.newArrayList();
+        final ArrayList<IntervalSet> bToA = Lists.newArrayList();
         FlightIntersector.intersect(
                 flightA, flightB,
                 aToB, bToA,

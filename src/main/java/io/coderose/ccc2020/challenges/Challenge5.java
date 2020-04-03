@@ -1,5 +1,6 @@
 package io.coderose.ccc2020.challenges;
 
+import io.coderose.ccc2020.challenges.FlightIntersector.IntervalSet;
 import io.coderose.ccc2020.utilities.CsvFlightDataReader;
 import io.coderose.ccc2020.utilities.FileReader;
 
@@ -14,11 +15,13 @@ import java.util.TreeMap;
 
 public class Challenge5 extends AbstractChallenge {
 
+
     private FileReader reader;
 
     @Override
     public void run() {
-        for (int f = 5; f <= 5; f++) {
+        long startTime = System.currentTimeMillis();
+        for (int f = 1; f <= 1; f++) {
             reader = newReader("level5_" + f + ".in");
 //            reader = newReader("level5_example.in");
             File file = new File("level5_" + f + ".out");
@@ -44,7 +47,7 @@ public class Challenge5 extends AbstractChallenge {
                     flightData.add(data);
                 }
 
-                Map<Integer, Map<Integer, List<String>>> sortedResult = new TreeMap<>();
+                Map<Integer, Map<Integer, List<IntervalSet>>> sortedResult = new TreeMap<>();
                 for (int i = 0; i < flightData.size(); i++) {
                     final FlightRecorder flightA = flightData.get(i);
                     assert flightA != null;
@@ -59,8 +62,8 @@ public class Challenge5 extends AbstractChallenge {
                             continue;
                         }
 
-                        List<String> resultAtoB = new ArrayList<>();
-                        List<String> resultBtoA = new ArrayList<>();
+                        List<IntervalSet> resultAtoB = new ArrayList<>();
+                        List<IntervalSet> resultBtoA = new ArrayList<>();
 
                         FlightIntersector.intersect(
                                 flightA, flightB,
@@ -69,15 +72,15 @@ public class Challenge5 extends AbstractChallenge {
                         );
 
                         if (!resultAtoB.isEmpty()) {
-                            final Map<Integer, List<String>> data = sortedResult.computeIfAbsent(flightA.flightId, k -> new TreeMap<>());
+                            final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightA.flightId, k -> new TreeMap<>());
                             data.put(flightB.flightId, resultAtoB);
                         }
                         if (!resultBtoA.isEmpty()) {
-                            final Map<Integer, List<String>> data = sortedResult.computeIfAbsent(flightB.flightId, k -> new TreeMap<>());
+                            final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightB.flightId, k -> new TreeMap<>());
                             data.put(flightA.flightId, resultBtoA);
                         }
                     }
-                    System.out.println("Did i: " + i + " of " + flightData.size());
+                    System.out.println("Did " + i + " of " + flightData.size() + " after " + (System.currentTimeMillis() - startTime) / 1000. + " sec");
                 }
 
                 sortedResult.values().forEach(val -> {
@@ -89,6 +92,8 @@ public class Challenge5 extends AbstractChallenge {
                 throw new IllegalStateException(e);
             }
         }
+        long stopTime = System.currentTimeMillis();
+        System.out.println((stopTime - startTime) / 1000. + " sec");
     }
 
     public static void main(String[] args) {

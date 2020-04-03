@@ -1,5 +1,6 @@
 package io.coderose.ccc2020.challenges;
 
+import io.coderose.ccc2020.challenges.FlightIntersector.IntervalSet;
 import io.coderose.ccc2020.utilities.CsvFlightDataReader;
 import io.coderose.ccc2020.utilities.FileReader;
 
@@ -48,7 +49,7 @@ public class Challenge6 extends AbstractChallenge {
                     flightData.add(data);
                 }
 
-                Map<Integer, Map<Integer, List<String>>> sortedResult = new TreeMap<>();
+                Map<Integer, Map<Integer, List<IntervalSet>>> sortedResult = new TreeMap<>();
                 for (int i = 0; i < flightData.size(); i++) {
                     final FlightRecorder flightA = flightData.get(i);
                     assert flightA != null;
@@ -63,8 +64,8 @@ public class Challenge6 extends AbstractChallenge {
                             continue;
                         }
 
-                        List<String> resultAtoB = new ArrayList<>();
-                        List<String> resultBtoA = new ArrayList<>();
+                        List<IntervalSet> resultAtoB = new ArrayList<>();
+                        List<IntervalSet> resultBtoA = new ArrayList<>();
 
                         FlightIntersector.intersect(
                                 flightA, flightB,
@@ -73,11 +74,11 @@ public class Challenge6 extends AbstractChallenge {
                         );
 
                         if (!resultAtoB.isEmpty()) {
-                            final Map<Integer, List<String>> data = sortedResult.computeIfAbsent(flightA.flightId, k -> new TreeMap<>());
+                            final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightA.flightId, k -> new TreeMap<>());
                             data.put(flightB.flightId, resultAtoB);
                         }
                         if (!resultBtoA.isEmpty()) {
-                            final Map<Integer, List<String>> data = sortedResult.computeIfAbsent(flightB.flightId, k -> new TreeMap<>());
+                            final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightB.flightId, k -> new TreeMap<>());
                             data.put(flightA.flightId, resultBtoA);
                         }
                     }

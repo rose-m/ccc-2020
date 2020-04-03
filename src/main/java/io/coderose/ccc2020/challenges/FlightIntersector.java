@@ -33,7 +33,7 @@ public class FlightIntersector {
         for (int offset = 0; offset <= 3600; offset++) {
             intersectWithOffset(flightA, flightB, minDist, maxDist, resultAtoB, offset);
         }
-        for (int offset = 1; offset <= 3600; offset++) {
+        for (int offset = 0; offset <= 3600; offset++) {
             intersectWithOffset(flightB, flightA, minDist, maxDist, resultBtoA, offset);
         }
     }

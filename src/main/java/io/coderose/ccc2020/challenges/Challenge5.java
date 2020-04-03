@@ -18,7 +18,7 @@ public class Challenge5 extends AbstractChallenge {
 
     @Override
     public void run() {
-        for (int f = 4; f <= 4; f++) {
+        for (int f = 5; f <= 5; f++) {
             reader = newReader("level5_" + f + ".in");
 //            reader = newReader("level5_example.in");
             File file = new File("level5_" + f + ".out");

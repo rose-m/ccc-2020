@@ -1,6 +1,7 @@
 package io.coderose.ccc2020.challenges;
 
 import io.coderose.ccc2020.utilities.CsvFlightDataReader;
+import io.coderose.ccc2020.utilities.CsvFlightDataReader.Point;
 import io.coderose.ccc2020.utilities.FileReader;
 
 import java.io.File;
@@ -16,8 +17,8 @@ public class Challenge4 extends AbstractChallenge {
     @Override
     public void run() {
         for (int f = 1; f <= 5; f++) {
-//            reader = newReader("level4_" + f + ".in");
-            reader = newReader("level4_example.in");
+            reader = newReader("level4_" + f + ".in");
+//            reader = newReader("level4_example.in");
             File file = new File("level4_" + f + ".out");
             System.out.println(file.getAbsoluteFile());
 
@@ -28,10 +29,13 @@ public class Challenge4 extends AbstractChallenge {
                 for (int l = 0; l < numLines; l++) {
                     final List<Integer> lineData = reader.parseInts();
                     final int flightId = lineData.get(0);
-                    final int timestamp = lineData.get(0);
+                    final int timestamp = lineData.get(1);
 
                     final CsvFlightDataReader reader = CsvFlightDataReader.forResource("challenge4", flightId);
-                    final List<CsvFlightDataReader.Point> points = reader.parseAllPoints();
+                    final List<Point> points = reader.parseAllPoints();
+
+                    final Point result = Interpolate4.interpolate(points, timestamp);
+                    w.println(result.lat + " " + result.lon + " " + result.alt);
                 }
             } catch (IOException e) {
                 throw new IllegalStateException(e);

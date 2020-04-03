@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 public class Challenge5 extends AbstractChallenge {
 
@@ -20,8 +22,8 @@ public class Challenge5 extends AbstractChallenge {
 
     @Override
     public void run() {
-        long startTime = System.currentTimeMillis();
-        for (int f = 1; f <= 1; f++) {
+        for (int f = 1; f <= 5; f++) {
+            long startTime = System.currentTimeMillis();
             reader = newReader("level5_" + f + ".in");
 //            reader = newReader("level5_example.in");
             File file = new File("level5_" + f + ".out");
@@ -48,7 +50,8 @@ public class Challenge5 extends AbstractChallenge {
                 }
 
                 Map<Integer, Map<Integer, List<IntervalSet>>> sortedResult = new TreeMap<>();
-                for (int i = 0; i < flightData.size(); i++) {
+                AtomicInteger progress = new AtomicInteger(0);
+                IntStream.range(0, flightData.size()).parallel().forEach(i -> {
                     final FlightRecorder flightA = flightData.get(i);
                     assert flightA != null;
                     assert flightA.route != null;
@@ -72,16 +75,20 @@ public class Challenge5 extends AbstractChallenge {
                         );
 
                         if (!resultAtoB.isEmpty()) {
-                            final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightA.flightId, k -> new TreeMap<>());
-                            data.put(flightB.flightId, resultAtoB);
+                            synchronized (sortedResult) {
+                                final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightA.flightId, k -> new TreeMap<>());
+                                data.put(flightB.flightId, resultAtoB);
+                            }
                         }
                         if (!resultBtoA.isEmpty()) {
-                            final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightB.flightId, k -> new TreeMap<>());
-                            data.put(flightA.flightId, resultBtoA);
+                            synchronized (sortedResult) {
+                                final Map<Integer, List<IntervalSet>> data = sortedResult.computeIfAbsent(flightB.flightId, k -> new TreeMap<>());
+                                data.put(flightA.flightId, resultBtoA);
+                            }
                         }
                     }
-                    System.out.println("Did " + i + " of " + flightData.size() + " after " + (System.currentTimeMillis() - startTime) / 1000. + " sec");
-                }
+                    System.out.println("Did " + (progress.incrementAndGet()) + " of " + flightData.size() + " after " + (System.currentTimeMillis() - startTime) / 1000. + " sec");
+                });
 
                 sortedResult.values().forEach(val -> {
                     val.values().forEach(output -> {
@@ -91,9 +98,9 @@ public class Challenge5 extends AbstractChallenge {
             } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
+            long stopTime = System.currentTimeMillis();
+            System.out.println((stopTime - startTime) / 1000. + " sec");
         }
-        long stopTime = System.currentTimeMillis();
-        System.out.println((stopTime - startTime) / 1000. + " sec");
     }
 
     public static void main(String[] args) {
